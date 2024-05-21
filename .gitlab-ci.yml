@@ -1,0 +1,31 @@
+image: php:8.1
+
+stages:
+  - build
+  - test
+
+variables:
+  COMPOSER_ALLOW_SUPERUSER: 1
+
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  # Mettre à jour les paquets et installer les dépendances nécessaires
+  - apt-get update && apt-get install -y git unzip
+  # Installer Composer
+  - curl -sS https://getcomposer.org/installer | php
+  - mv composer.phar /usr/local/bin/composer
+  # Installer les dépendances
+  - composer install
+
+build:
+  stage: build
+  script:
+    - echo "Build stage - Pas d'action nécessaire pour ce projet."
+
+test:
+  stage: test
+  script:
+    - ./vendor/bin/phpunit --configuration phpunit.xml
