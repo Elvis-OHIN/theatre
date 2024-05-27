@@ -21,7 +21,7 @@ class BookingControllerTest extends TestCase
         $this->app = AppFactory::create();
 
         // Configurer Twig
-        $twig = Twig::create(__DIR__ . '/../templates', ['cache' => false]);
+        $twig = Twig::create(__DIR__ . '/../../templates', ['cache' => false]);
 
         // Ajouter le middleware Twig
         $this->app->add(TwigMiddleware::create($this->app, $twig));
