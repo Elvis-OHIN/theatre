@@ -1,4 +1,6 @@
 <?php
+require __DIR__ . "/../../src/Booking.php";
+require __DIR__ . "/../../src/BookingController.php";
 
 use PHPUnit\Framework\TestCase;
 use Slim\Factory\AppFactory;
