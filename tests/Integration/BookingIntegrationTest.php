@@ -1,10 +1,13 @@
 <?php
 
+namespace Test\Integration;
+
 use PHPUnit\Framework\TestCase;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Factory\ResponseFactory;
 use Slim\Views\Twig;
+use DI\Container;
 use App\Controller\BookingController;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -16,7 +19,7 @@ class BookingIntegrationTest extends TestCase
 
     protected function setUp(): void
     {
-        $container = new DI\Container();
+        $container = new Container();
         AppFactory::setContainer($container);
         $this->app = AppFactory::create();
 
@@ -24,10 +27,10 @@ class BookingIntegrationTest extends TestCase
             return Twig::create(__DIR__ . '/../../templates', ['cache' => false]);
         });
 
-        $this->pdo = new PDO('sqlite:' . __DIR__ . '/../../var/database.test.sqlite');
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->pdo = new \PDO('sqlite:' . __DIR__ . '/../../var/database.test.sqlite');
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
-        $container->set(PDO::class, function () {
+        $container->set(\PDO::class, function () {
             return $this->pdo;
         });
 
@@ -59,7 +62,8 @@ class BookingIntegrationTest extends TestCase
             ['name' => 'Spectacle 3', 'description' => 'Description du Spectacle 3', 'capacity' => 197],
         ];
 
-        $stmt = $this->pdo->prepare("INSERT INTO spectacles (name, description, capacity) VALUES (:name, :description, :capacity)");
+        $stmt = $this->pdo->prepare("INSERT INTO spectacles (name, description, capacity) 
+        VALUES (:name, :description, :capacity)");
 
         foreach ($spectacles as $spectacle) {
             $stmt->execute([
