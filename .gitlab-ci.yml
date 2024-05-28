@@ -26,10 +26,6 @@ phpcs:
   script:
     - chmod +x ./vendor/bin/phpcs
     - ./vendor/bin/phpcs
-  artifacts:
-    when: always
-    paths:
-      - phpcs.xml
 
 phpstan:
   stage: analysis
@@ -37,10 +33,6 @@ phpstan:
   script:
     - chmod +x ./vendor/bin/phpstan
     - ./vendor/bin/phpstan analyse
-  artifacts:
-    when: always
-    paths:
-      - phpstan.neon
 
 phpcbf:
   stage: analysis
