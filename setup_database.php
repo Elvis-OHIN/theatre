@@ -1,7 +1,14 @@
 <?php
+$databasePath = __DIR__ . '/var/database.sqlite';
+$databaseDir = dirname($databasePath);
 
-$pdo = new PDO('sqlite:' . __DIR__ . '/var/database.sqlite');
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+if (!is_dir($databaseDir)) {
+    mkdir($databaseDir, 0777, true);
+}
+
+$pdo = new \PDO('sqlite:' . $databasePath);
+$pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
 
 $pdo->exec("CREATE TABLE IF NOT EXISTS spectacles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

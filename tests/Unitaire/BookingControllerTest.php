@@ -28,7 +28,14 @@ class BookingControllerTest extends TestCase
             return Twig::create(__DIR__ . '/../../templates', ['cache' => false]);
         });
 
-        $this->pdo = new \PDO('sqlite:' . __DIR__ . '/../../var/database.test.sqlite');
+        $databasePath = __DIR__ . '/../../var/database.test.sqlite';
+        $databaseDir = dirname($databasePath);
+
+        if (!is_dir($databaseDir)) {
+            mkdir($databaseDir, 0777, true);
+        }
+
+        $this->pdo = new \PDO('sqlite:' . $databasePath);
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         $container->set(\PDO::class, function () {
