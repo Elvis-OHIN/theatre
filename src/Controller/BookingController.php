@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use Psr\Http\Message\ResponseInterface as Response;
@@ -9,7 +10,6 @@ class BookingController
 {
     private $view;
     private $booking;
-
     public function __construct(Twig $view, Booking $booking)
     {
         $this->view = $view;
