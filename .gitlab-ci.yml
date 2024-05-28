@@ -26,6 +26,8 @@ phpcs:
   script:
     - chmod +x ./vendor/bin/phpcs
     - ./vendor/bin/phpcs
+  except:
+    - merge_requests
 
 phpstan:
   stage: analysis
@@ -33,6 +35,8 @@ phpstan:
   script:
     - chmod +x ./vendor/bin/phpstan
     - ./vendor/bin/phpstan analyse
+  except:
+    - merge_requests
 
 phpcbf:
   stage: analysis
@@ -40,6 +44,8 @@ phpcbf:
   script:
     - chmod +x ./vendor/bin/phpcbf
     - ./vendor/bin/phpcbf
+  except:
+    - merge_requests
 
 testunitaire:
   stage: testunitaire
@@ -49,14 +55,16 @@ testunitaire:
   script:
     - chmod +x ./vendor/bin/phpunit
     - ./vendor/bin/phpunit --configuration phpunit.xml --testsuite "Unitaire Test"
-
+  except:
+    - merge_requests
 
 testintegration:
   stage: testintegration
   image: php:latest
   script:
     - ./vendor/bin/phpunit --configuration phpunit.xml --testsuite "Integration Test"
-
+  except:
+    - merge_requests
 
 deploy:
   stage: deploy
