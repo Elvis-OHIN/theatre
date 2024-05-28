@@ -21,14 +21,14 @@ class BookingControllerTest extends TestCase
         AppFactory::setContainer($container);
         $this->app = AppFactory::create();
 
-        $container->set(Twig::class, function() {
+        $container->set(Twig::class, function () {
             return Twig::create(__DIR__ . '/../../templates', ['cache' => false]);
         });
 
         $this->pdo = new PDO('sqlite:' . __DIR__ . '/../../var/database.test.sqlite');
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $container->set(PDO::class, function() {
+        $container->set(PDO::class, function () {
             return $this->pdo;
         });
 
@@ -78,7 +78,7 @@ class BookingControllerTest extends TestCase
 
     public function testBookPage()
     {
-        $request = (new ServerRequestFactory)->createServerRequest('GET', '/booking');
+        $request = (new ServerRequestFactory())->createServerRequest('GET', '/booking');
         $response = $this->app->handle($request);
 
         $this->assertEquals(200, $response->getStatusCode());
@@ -86,7 +86,7 @@ class BookingControllerTest extends TestCase
 
     public function testHandleBookingSuccess()
     {
-        $request = (new ServerRequestFactory)->createServerRequest('POST', '/booking')
+        $request = (new ServerRequestFactory())->createServerRequest('POST', '/booking')
             ->withParsedBody([
                 'spectacle_id' => 2,
                 'seatNumber' => 1,
@@ -103,7 +103,7 @@ class BookingControllerTest extends TestCase
         $stmt = $this->pdo->prepare("INSERT INTO bookings (spectacle_id, seatNumber, rang) VALUES (1, 1, 'A')");
         $stmt->execute();
 
-        $request = (new ServerRequestFactory)->createServerRequest('POST', '/booking')
+        $request = (new ServerRequestFactory())->createServerRequest('POST', '/booking')
             ->withParsedBody([
                 'spectacle_id' => 1,
                 'seatNumber' => 1,
