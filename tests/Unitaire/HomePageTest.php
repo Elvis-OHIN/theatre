@@ -1,5 +1,7 @@
 <?php
 
+namespace Test\Unitaire;
+
 use PHPUnit\Framework\TestCase;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
@@ -21,7 +23,7 @@ class HomePageTest extends TestCase
         AppFactory::setContainer($container);
         $this->app = AppFactory::create();
 
-        $container->set(Twig::class, function() {
+        $container->set(Twig::class, function () {
             $loader = new FilesystemLoader(__DIR__ . '/../../templates');
             return new Twig($loader, ['cache' => false]);
         });
@@ -33,8 +35,8 @@ class HomePageTest extends TestCase
 
     public function testHomePage()
     {
-        $request = (new ServerRequestFactory)->createServerRequest('GET', '/');
-        $response = (new ResponseFactory)->createResponse();
+        $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
+        $response = (new ResponseFactory())->createResponse();
 
         $response = $this->app->handle($request);
 

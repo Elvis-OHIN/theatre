@@ -1,5 +1,7 @@
 <?php
 
+namespace Test\Integration;
+
 use PHPUnit\Framework\TestCase;
 use Slim\Factory\AppFactory;
 use Slim\Psr7\Factory\ServerRequestFactory;
@@ -20,7 +22,7 @@ class TheatreReservationIntegrationTest extends TestCase
         AppFactory::setContainer($container);
         $this->app = AppFactory::create();
 
-        $container->set(Twig::class, function() {
+        $container->set(Twig::class, function () {
             return Twig::create(__DIR__ . '/../../templates', ['cache' => false]);
         });
 
@@ -31,11 +33,9 @@ class TheatreReservationIntegrationTest extends TestCase
 
     public function testHomePage()
     {
-        $request = (new ServerRequestFactory)->createServerRequest('GET', '/');
+        $request = (new ServerRequestFactory())->createServerRequest('GET', '/');
         $response = $this->app->handle($request);
 
         $this->assertEquals(200, $response->getStatusCode());
     }
-
-    
 }

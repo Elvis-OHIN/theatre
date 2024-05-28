@@ -1,0 +1,13 @@
+includes:
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+
+parameters:
+    level: 5
+    paths:
+        - src
+        - tests
+    bootstrapFiles:
+        - %currentWorkingDirectory%/vendor/autoload.php
+    excludePaths:
+        analyse:
+            - %currentWorkingDirectory%/vendor

@@ -1,11 +1,11 @@
 <?php
+
 namespace App;
 
 class Booking
 {
     private $capacity;
     private $bookedSeats = [];
-
     public function __construct($capacity)
     {
         $this->capacity = $capacity;

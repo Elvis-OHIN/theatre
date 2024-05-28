@@ -1,6 +1,7 @@
 image: php:8.2
 
 stages:
+  - analysis
   - testunitaire
   - testintegration
   - deploy
@@ -19,6 +20,34 @@ before_script:
   - composer install
   - composer require --dev phpunit/phpunit phpunit/php-code-coverage
 
+phpcs:
+  stage: analysis
+  image: php:latest
+  script:
+    - chmod +x ./vendor/bin/phpcs
+    - ./vendor/bin/phpcs
+  artifacts:
+    when: always
+    paths:
+      - phpcs.xml
+
+phpstan:
+  stage: analysis
+  image: php:latest
+  script:
+    - chmod +x ./vendor/bin/phpstan
+    - ./vendor/bin/phpstan analyse
+  artifacts:
+    when: always
+    paths:
+      - phpstan.neon
+
+phpcbf:
+  stage: analysis
+  image: php:latest
+  script:
+    - chmod +x ./vendor/bin/phpcbf
+    - ./vendor/bin/phpcbf
 
 testunitaire:
   stage: testunitaire
@@ -35,10 +64,6 @@ testintegration:
   image: php:latest
   script:
     - ./vendor/bin/phpunit --configuration phpunit.xml --testsuite "Integration Test"
-  artifacts:
-    when: always
-    paths:
-      - tests/_output/
 
 
 deploy:
