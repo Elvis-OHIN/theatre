@@ -82,7 +82,6 @@ deploy:
     - echo "username = $DB_USERNAME" >> config_production.ini
     - echo "password = $DB_PASSWORD" >> config_production.ini
     - echo "dbname = $DB_NAME" >> config_production.ini
-    - rmdir var
     - php setup_database.php
     - scp -r * $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
   only:
