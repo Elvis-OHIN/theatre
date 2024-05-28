@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Form</title>
+</head>
+<body>
+    <h1>Book a Seat</h1>
+    {% if message is defined %}
+        <p>{{ message }}</p>
+    {% endif %}
+    <form method="POST" action="{{ formAction }}">
+        <label for="seat">Select a seat:</label>
+        <select name="seat" id="seat">
+            {% for seat in seats %}
+                <option value="{{ seat }}" {% if seat in bookedSeats %}disabled{% endif %}>{{ seat }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Book</button>
+    </form>
+    <h2>Booked Seats</h2>
+    <ul>
+        {% for seat in bookedSeats %}
+            <li>{{ seat }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

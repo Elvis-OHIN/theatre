@@ -1,0 +1,62 @@
+image: php:8.2
+
+stages:
+  - testunitaire
+  - testintegration
+  - deploy
+
+
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  - apt-get update && apt-get -yq install git unzip zip libzip-dev zlib1g-dev
+  - docker-php-ext-install zip
+  - pecl install xdebug && docker-php-ext-enable xdebug
+  - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+  - php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+  - composer install
+  - composer require --dev phpunit/phpunit phpunit/php-code-coverage
+
+
+testunitaire:
+  stage: testunitaire
+  image: php:latest
+  variables:
+    XDEBUG_MODE: coverage
+  script:
+    - chmod +x ./vendor/bin/phpunit
+    - ./vendor/bin/phpunit --configuration phpunit.xml --testsuite "Unitaire Test"
+
+
+testintegration:
+  stage: testintegration
+  image: php:latest
+  script:
+    - ./vendor/bin/phpunit --configuration phpunit.xml --testsuite "Integration Test"
+  artifacts:
+    when: always
+    paths:
+      - tests/_output/
+
+
+deploy:
+  stage: deploy
+  image: php:latest
+  before_script:
+    - apt-get update -y
+    - apt-get install -y openssh-client
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
+  script:
+    - scp -r * $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
+  only:
+    - main  
+  dependencies:
+    - testunitaire
+    - testintegration
+
+
