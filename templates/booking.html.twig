@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Réservation de place</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Réservation de place</h1>
+
+        {% if error == 'no_seats' %}
+            <div class="alert alert-danger" role="alert">
+                Plus de places disponibles pour ce spectacle.
+            </div>
+        {% elseif error == 'seat_taken' %}
+            <div class="alert alert-danger" role="alert">
+                Ce siège est déjà réservé.
+            </div>
+        {% endif %}
+
+        <form action="/booking" method="post">
+            <div class="form-group">
+                <label for="spectacle_id">Spectacle :</label>
+                <select class="form-control" id="spectacle_id" name="spectacle_id" required>
+                    {% for spectacle in spectacles %}
+                        <option value="{{ spectacle.id }}">
+                            {{ spectacle.name }} ({{ spectacle.availableSeats }} places disponibles)
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="rang">Rang :</label>
+                <select class="form-control" id="rang" name="rang" required>
+                    {% for letter in 'A'..'O' %}
+                        <option value="{{ letter }}">{{ letter }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="seatNumber">Numéro de siège :</label>
+                <input type="number" class="form-control" id="seatNumber" name="seatNumber" min="1" required>
+                <datalist id="seatList">
+                    {% for spectacle in spectacles %}
+                        {% if spectacle.id == selectedSpectacleId %}
+                            {% set bookedSeats = spectacle.bookedSeats %}
+                            {% for i in 1..capacity %}
+                                {% if bookedSeats is not iterable or i not in bookedSeats %}
+                                    <option value="{{ i }}">
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </datalist>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Réserver</button>
+        </form>
+        
+        <a href="/" class="back-link">Retour à l'accueil</a>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

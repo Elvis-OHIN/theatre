@@ -77,11 +77,13 @@ deploy:
     - chmod 600 ~/.ssh/id_rsa
     - ssh-keyscan -H $DEPLOY_HOST >> ~/.ssh/known_hosts
   script:
+    - echo "[database]" > config_production.ini
+    - echo "host = $DB_HOST" >> config_production.ini
+    - echo "username = $DB_USERNAME" >> config_production.ini
+    - echo "password = $DB_PASSWORD" >> config_production.ini
+    - echo "dbname = $DB_NAME" >> config_production.ini
     - scp -r * $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
   only:
     - master  
-  dependencies:
-    - testunitaire
-    - testintegration
 
 
