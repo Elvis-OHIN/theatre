@@ -54,7 +54,7 @@ deploy:
   script:
     - scp -r * $DEPLOY_USER@$DEPLOY_HOST:$DEPLOY_PATH
   only:
-    - main  
+    - master  
   dependencies:
     - testunitaire
     - testintegration
